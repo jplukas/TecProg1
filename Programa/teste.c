@@ -8,6 +8,14 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 
 
 #include "lista.h"
+
+void entrada(char* a, int t){
+	fgets(a, t, stdin);
+	fflush(stdin);
+	if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
+        a[strlen (a) - 1] = '\0';
+}
+
 main(){
 	printf("Digite os nomes dos elementos que você quer incluir na lista:\n\n");
 	Lista l = criaLista();
@@ -18,28 +26,20 @@ main(){
 	//Vai aparecer varias vezes no codigo, entao provavelmente sera melhor
 	//criar uma funcao especificamente para isso, para reaproveitar codigo
 	//e facilitar a leitura.
-	fgets(a, TAM_NOME, stdin);
-	fflush(stdin);
-	if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
-        a[strlen (a) - 1] = '\0';
+	entrada(a, TAM_NOME);
 
 	while(!equals(a, "pare")){
 		Elemento * e = criaElemento(a);
 		insereNaLista(l, e);
-		fgets(a, TAM_NOME, stdin);
-		if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
-        a[strlen (a) - 1] = '\0';
-    	fflush(stdin);
+		entrada(a, TAM_NOME);
 	}
 	printf("\n");
 	percorreLista(l);
 	printf("\n");
 	printf("Agora digite o nome de um item para retirar da lista:\n\n");
 
-	fgets(a, TAM_NOME, stdin);
-	if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
-        a[strlen (a) - 1] = '\0';
-	fflush(stdin);
+	entrada(a, TAM_NOME);
+	
 	while(!equals(a, "pare")){
 		Elemento * el = retiraDaLista(l, buscaNaLista(l, a));
 		if(el)printf("O elemento %s foi retirado da lista.\n", el->n);
@@ -47,10 +47,7 @@ main(){
 		printf("\nAgora vejamos como a lista ficou:\n\n");
 		percorreLista(l);
 		printf("\n");
-		fgets(a, TAM_NOME, stdin);
-		if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
-        a[strlen (a) - 1] = '\0';
-    	fflush(stdin);
+		entrada(a, TAM_NOME);
 	}
 	printf("\n");
 	printf("A lista será destruída\n\n");
