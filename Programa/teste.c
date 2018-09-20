@@ -7,8 +7,7 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 ***************************************************************************************/
 
 
-#include "lista.h"
-
+#include "tabSim.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
 	fflush(stdin);
@@ -17,8 +16,10 @@ void entrada(char* a, int t){
 }
 
 main(){
+	/*
 	printf("Digite os nomes dos elementos que você quer incluir na lista:\n\n");
 	Lista l = criaLista();
+	
 	
 	char a[TAM_NOME];
 	
@@ -39,7 +40,7 @@ main(){
 	printf("Agora digite o nome de um item para retirar da lista:\n\n");
 
 	entrada(a, TAM_NOME);
-	
+
 	while(!equals(a, "pare")){
 		Elemento * el = retiraDaLista(l, buscaNaLista(l, a));
 		if(el)printf("O elemento %s foi retirado da lista.\n", el->n);
@@ -53,4 +54,15 @@ main(){
 	printf("A lista será destruída\n\n");
 	destroiLista(l);
 	percorreLista(l);
+	*/
+	char a[TAM_NOME];
+	entrada(a, TAM_NOME);
+	Elemento *e = criaElemento(a);
+	entrada(a, TAM_NOME);
+	TabSim t = criaTabSim(10);
+	insereNaTabSim(t, a, e);
+	percorreLista(t->l[0]);
+	Elemento * e2 = buscaNaTabSim(t, a);
+	printf("Elemento %s\n", e2->n);
+	//destroiTabSim(t);
 }

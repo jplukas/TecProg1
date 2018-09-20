@@ -20,7 +20,7 @@ typedef lista* Lista;
 //Funcoes
 //Lista
 Lista criaLista(){
-	Lista l;
+	Lista l = malloc(sizeof(Lista));
 	l->cabec = NULL;
 	return l;
 }
