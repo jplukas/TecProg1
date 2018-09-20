@@ -27,16 +27,13 @@ Lista criaLista(){
 
 void destroiLista(Lista l){
 	Elo e = l->cabec;
-	Elo proxE = NULL;
+	Elo proxE;
 	while(e){
-		proxE = e;
-		e = e->next;
-		//printf("%s\n", proxE->val->n);
-		free(proxE);
-		proxE = NULL;
-		//printf("%s\n", proxE->val->n);
+		proxE = e->next;
+		free(e);
+		e = proxE;
 	}
-	//free(l);
+	l->cabec = NULL;
 }
 
 Lista insereNaLista(Lista l, Elemento *val){
