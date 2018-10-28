@@ -1,4 +1,6 @@
-#define NULL 0
+#ifndef LISTA_H
+#define LISTA_H
+
 #include "elemento.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -44,10 +46,10 @@ Lista insereNaLista(Lista l, Elemento *val){
 		return l;
 	}
 	while(e->next){
-		if(equals(e->val->n, val->n)) return NULL;
+		if(strcmp(e->val->n, val->n)) return NULL;
 		e = e->next;
 	}
-	if(equals(e->val->n, val->n)) return NULL;
+	if(strcmp(e->val->n, val->n)) return NULL;
 	e->next = malloc(sizeof(Elo));
 	e->next->val = val;
 	return l;
@@ -56,7 +58,7 @@ Lista insereNaLista(Lista l, Elemento *val){
 Elemento *buscaNaLista(Lista l, char *n){
 	Elo e = l->cabec;
 	while(e){
-		if(equals(e->val->n, n)) return e->val;
+		if(strcmp(e->val->n, n)) return e->val;
 		e = e->next;
 	}
 	return NULL;
@@ -92,21 +94,5 @@ void percorreLista(Lista l){
 }
 
 
-int equals(char *s1, char *s2){
-	if(s1 == s2) return 1;
-	int i = 0;
-	while(!((s1[i] == '\0') && (s2[i] == '\0'))){
-		if(s1[i] != s2[i]) return 0;
-		i++;
-	}
-	return 1;
-}
 
-int strCopy(char *origem, char *destino){
-	int i = 0;
-	while(origem[i] != '\0'){
-		destino[i] = origem[i];
-		i++;
-	}
-	destino[i] = '\0';
-}
+#endif /* LISTA_H */

@@ -1,3 +1,5 @@
+#ifndef TABSIM_H
+#define TABSIM_H
 #include "lista.h"
 
 typedef struct {
@@ -37,3 +39,4 @@ Elemento *buscaNaTabSim(TabSim t, char *n){
 	return (buscaNaLista(t->l[nHash], n));
 }
 
+#endif

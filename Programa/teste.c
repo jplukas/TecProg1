@@ -5,8 +5,10 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 ((ainda falta fazer as tabelas de simbolos, rs))
 
 ***************************************************************************************/
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include "elemento.h"
+#include "lista.h" 
 #include "tabSim.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
@@ -15,7 +17,7 @@ void entrada(char* a, int t){
         a[strlen (a) - 1] = '\0';
 }
 
-main(){
+int main(){
 	/*
 	printf("Digite os nomes dos elementos que você quer incluir na lista:\n\n");
 	Lista l = criaLista();
@@ -65,4 +67,5 @@ main(){
 	Elemento * e2 = buscaNaTabSim(t, a);
 	printf("Elemento %s\n", e2->n);
 	//destroiTabSim(t);
+	return 0;
 }
