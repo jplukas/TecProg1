@@ -7,14 +7,22 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 ***************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "elemento.h"
 #include "lista.h" 
-#include "tabSim.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
 	fflush(stdin);
 	if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
         a[strlen (a) - 1] = '\0';
+}
+
+int comp(char* chave, Elemento el){
+	return strcmp(chave, el->n);
+}
+
+void mostra(Elemento el){
+	printf("%s\n", el->n);
 }
 
 int main(){
@@ -58,14 +66,25 @@ int main(){
 	percorreLista(l);
 	*/
 	char a[TAM_NOME];
+	Lista l = criaLista(&comp, &mostra);
 	entrada(a, TAM_NOME);
-	Elemento *e = criaElemento(a);
+	Elemento e;
+	while(strcmp(a, "0")){
+		Elemento e = criaElemento(a);
+		insereNaLista(l, e);
+		entrada(a, TAM_NOME);
+	}
+
+	percorreLista(l);	
+
 	entrada(a, TAM_NOME);
-	TabSim t = criaTabSim(10);
-	insereNaTabSim(t, a, e);
-	percorreLista(t->l[0]);
-	Elemento * e2 = buscaNaTabSim(t, a);
-	printf("Elemento %s\n", e2->n);
+	while(strcmp(a, "0")){
+		e = criaElemento(a);
+		retiraDaLista(l, a);
+		percorreLista(l);			
+		entrada(a, TAM_NOME);
+	}
+
 	//destroiTabSim(t);
 	return 0;
 }

@@ -22,13 +22,15 @@
 
 typedef struct{
 	char n[TAM_NOME];
-}Elemento;
+}elemento;
+
+typedef elemento * Elemento;
 
 //Funcao que cria e retorna um ponteiro para um elemento.
 //Recebe como parametro uma "string" que sera o nome do elemento.
 
-Elemento * criaElemento(char n[]){
-	Elemento * el = malloc(sizeof(Elemento*));
+Elemento criaElemento(char n[]){
+	Elemento el = malloc(sizeof(Elemento));
 	strcpy(el->n, n);
 	return el;
 }
