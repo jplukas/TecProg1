@@ -10,19 +10,12 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 #include <string.h>
 #include "elemento.h"
 #include "lista.h" 
+#include "tabSim.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
 	fflush(stdin);
 	if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
         a[strlen (a) - 1] = '\0';
-}
-
-int comp(char* chave, Elemento el){
-	return strcmp(chave, el->n);
-}
-
-void mostra(Elemento el){
-	printf("%s\n", el->n);
 }
 
 int main(){

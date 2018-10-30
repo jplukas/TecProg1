@@ -13,6 +13,7 @@ typedef struct elo {
 	struct elo * next;
 	void * val;
 } elo;
+
 typedef elo* Elo;
 
 /* Lista */
@@ -28,8 +29,9 @@ typedef struct {
 
 	/* Funcao para mostrar conteudo dos elementos da lista */
 	/* Usado para testes e afins */
-	void (*mostra)(void*)		
+	void (*mostra)(void*);		
 } lista;
+
 typedef lista* Lista;
 
 /* FUNCOES */

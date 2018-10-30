@@ -9,10 +9,10 @@ typedef struct {
 
 typedef tabSim* TabSim;
 
-TabSim criaTabSim(int tam){
+TabSim criaTabSim(int tam, int (*comp)(void*, void*), void(*mostra)(void*)){
 	TabSim t = malloc(sizeof(TabSim));
 	t->l = malloc(tam * sizeof(Lista));
-	for(int i = 0; i < tam; i++) t->l[i] = criaLista();
+	for(int i = 0; i < tam; i++) t->l[i] = criaLista(comp, mostra);
 	t->tam = tam;
 	return t;
 }
@@ -28,13 +28,13 @@ int funcHash(char *s, int tam){
 	return 0;
 }
 
-int insereNaTabSim(TabSim t, char *n, Elemento *val){
+int insereNaTabSim(TabSim t, char *n, void *val){
 	int nHash = funcHash(n, t->tam);
 	insereNaLista(t->l[nHash], val);
 	return 1;
 }
 
-Elemento *buscaNaTabSim(TabSim t, char *n){
+void *buscaNaTabSim(TabSim t, char *n){
 	int nHash = funcHash(n, t->tam);
 	return (buscaNaLista(t->l[nHash], n));
 }
