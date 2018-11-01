@@ -28,6 +28,20 @@
 
 typedef enum Tipo_elem{GEN, OBJ, LUGAR, AVENTUREIRO};
 
+int examina(Elemento el, void* i){
+	if(!el) return 0;
+	if(!el->longa) return 0;
+	printf("%s\n", el->longa);
+	return 1;
+}
+
+int pegar(Elemento lugar, char * chave){
+	if(!lugar) return 0;
+	if(!lugar->conteudo) return 0;
+	if(!chave) return 0;
+	Elemento el = retiraDaLista(lugar->conteudo);
+}
+
 int comp(char* chave, Elemento el){
 	return strcmp(chave, el->nome);
 }
