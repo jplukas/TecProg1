@@ -1,54 +1,34 @@
 #ifndef ELEMENTO_H
 #define ELEMENTO_H
 
-#define TAM_NOME 20
-#define TAM_CURTA 80
-#define TAM_LONGA 200
-#define TAM_ARTIGO 5
-#define NUM_ARTIGOS 4
+/* Comeca defs e includes */
+	#define TAM_NOME 20
+	#define TAM_CURTA 80
+	#define TAM_LONGA 200
+	#define TAM_ARTIGO 5
+	#define NUM_ARTIGOS 4
 
-#ifndef NULL
-#define NULL 0
-#endif /* NULL */
+	#ifndef NULL
+	#define NULL 0
+	#endif /* NULL */
 
-#ifndef FALSE
-#define FALSE 0
-#endif /* FALSE */
+	#ifndef FALSE
+	#define FALSE 0
+	#endif /* FALSE */
 
-#ifndef TRUE
-#define TRUE 1
-#endif /* TRUE */
+	#ifndef TRUE
+	#define TRUE 1
+	#endif /* TRUE */
 
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "lista.h"
-#include "tabSim.h"
+	#include <string.h>
+	#include <stdlib.h>
+	#include <stdio.h>
+	#include "lista.h"
+	#include "tabSim.h"
+/* Termina defs e includes */
 
-typedef enum Tipo_elem{GEN, OBJ, LUGAR, AVENTUREIRO};
-
-int examina(Elemento el, void* i){
-	if(!el) return 0;
-	if(!el->longa) return 0;
-	printf("%s\n", el->longa);
-	return 1;
-}
-
-int pegar(Elemento lugar, char * chave){
-	if(!lugar) return 0;
-	if(!lugar->conteudo) return 0;
-	if(!chave) return 0;
-	Elemento el = retiraDaLista(lugar->conteudo);
-}
-
-int comp(char* chave, Elemento el){
-	return strcmp(chave, el->nome);
-}
-
-void mostra(Elemento el){
-	printf("%s\n", el->nome);
-}
+typedef enum {GEN, OBJ, LUGAR, AVENTUREIRO}Tipo_elem;
 
 typedef union{
 	int i;
@@ -106,38 +86,65 @@ typedef struct elem{
 
 	/* Propriedades especificas de lugar */
 	/* (NAO USAR SE NAO FOR LUGAR) */
-	elem * destino;
+	struct elem * destino;
 	short int aberta;
 
 }elemento;
 
 typedef elemento * Elemento;
 
+int comp(char* chave, Elo e){
+	return strcmp(chave, e->chave.str);
+}
+
+void mostra(Elo e){
+	printf("%s: %s\n", e->chave.str, ((Elemento)e->val)->nome);
+}
+
+Elo insere(Elemento el, char* chave){
+	Elo e = malloc(sizeof(elo) + sizeof(elemento));
+	e->val = el;
+	strcpy(e->chave.str, chave);
+	return e;
+}
+
+
 //Funcao que cria e retorna um ponteiro para um elemento.
 //Recebe como parametro uma "string" que sera o nome do elemento.
 
-Elemento criaElemento(char nome[], char curta[], char longa[],\
-	short int ativo, short int visivel, short int conhecido, char artigo[][]){
-	Elemento el = malloc(sizeof(Elemento));
+Elemento criaElemento(char* nome, char* curta, char* longa,\
+	short int ativo, short int visivel, short int conhecido){
+	Elemento el = malloc(sizeof(elemento));
+	/*
+	el->nome = malloc(TAM_NOME * sizeof(char));
+	el->curta = malloc(TAM_CURTA * sizeof(char));
+	el->longa = malloc(TAM_LONGA * sizeof(char));
+	*/
 	strcpy(el->nome, nome);
 	strcpy(el->curta, curta);
 	strcpy(el->longa, longa);
 	el->ativo = ativo;
 	el->visivel = visivel;
 	el->conhecido = conhecido;
-	el->artigo = artigo;
+	//el->artigo = {"o", "o", "o", "o"};
 	el->tipo = GEN;
-	el->conteudo = criaLista(comp, mostra);
-	el->acoes = criaTabSim(NULL, NULL);
+	el->conteudo = criaLista(comp, mostra, insere);
+	el->acoes = criaTabSim(100, comp, mostra, insere);
 	return el;
 }
 
-Elemento criaObj(char nome[], char curta[], char longa[],\
-	short int ativo, short int visivel, short int conhecido, char artigo[][]){
+Elemento criaObj(char* nome, char* curta, char* longa,\
+	short int ativo, short int visivel, short int conhecido){
 
-	Elemento el = criaElemento(nome, curta, longa, ativo, visivel, conhecido, artigo);
+	Elemento el = criaElemento(nome, curta, longa, ativo, visivel, conhecido);
 	el->tipo = OBJ;
-	el->detalhe.atributos = criaLista(comp, mostra);
+	el->detalhe.atributos = criaLista(comp, mostra, insere);
+}
+
+Elemento criaAventureiro(char* nome, char* curta, char* longa){
+	Elemento el = criaElemento(nome, curta, longa, TRUE, TRUE, TRUE);
+	el->tipo = AVENTUREIRO;
+	el->detalhe.atributos = criaLista(comp, mostra, insere);
 }
 
 #endif /* ELEMENTO_H */

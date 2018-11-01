@@ -11,6 +11,7 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 #include "elemento.h"
 #include "lista.h" 
 #include "tabSim.h"
+#include "libgame.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
 	fflush(stdin);
@@ -19,45 +20,29 @@ void entrada(char* a, int t){
 }
 
 int main(){
+	Aventureiro = criaAventureiro("Finn", "Finn, o Humano",\
+	 "Finn é o último humano da terra de OOO. Junto com seu cão mágico Jake, eles\
+ partirão em busca de incríveis aventuras!");
+
+	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
+		"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
+(que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
+
+	insereNaLista(Aventureiro->conteudo, escalibur, "Espada");
+
+	percorreLista(Aventureiro->conteudo);
+
+	Elemento e = buscaNaLista(Aventureiro->conteudo, "Espada");
+
+
+	printf("obj: %p\nrec: %p\n", (void*)escalibur, (void*)e);
+	//printf("%s\n", e->curta);
+	//printf("%s\n", e->longa);
+	//printf("%p\n", (void*)e);
+	//printf("%p\n", (void*)escalibur);
+	//examina(e, NULL);
+
 	/*
-	printf("Digite os nomes dos elementos que você quer incluir na lista:\n\n");
-	Lista l = criaLista();
-	
-	
-	char a[TAM_NOME];
-	
-	//Pega a entrada do usuario e tira o '\n' do final, se houver.
-	//Vai aparecer varias vezes no codigo, entao provavelmente sera melhor
-	//criar uma funcao especificamente para isso, para reaproveitar codigo
-	//e facilitar a leitura.
-	entrada(a, TAM_NOME);
-
-	while(!equals(a, "pare")){
-		Elemento * e = criaElemento(a);
-		insereNaLista(l, e);
-		entrada(a, TAM_NOME);
-	}
-	printf("\n");
-	percorreLista(l);
-	printf("\n");
-	printf("Agora digite o nome de um item para retirar da lista:\n\n");
-
-	entrada(a, TAM_NOME);
-
-	while(!equals(a, "pare")){
-		Elemento * el = retiraDaLista(l, buscaNaLista(l, a));
-		if(el)printf("O elemento %s foi retirado da lista.\n", el->n);
-		else printf("O elemento %s não foi encontrado na lista\n", a);
-		printf("\nAgora vejamos como a lista ficou:\n\n");
-		percorreLista(l);
-		printf("\n");
-		entrada(a, TAM_NOME);
-	}
-	printf("\n");
-	printf("A lista será destruída\n\n");
-	destroiLista(l);
-	percorreLista(l);
-	*/
 	char a[TAM_NOME];
 	Lista l = criaLista(&comp, &mostra);
 	entrada(a, TAM_NOME);
@@ -79,5 +64,6 @@ int main(){
 	}
 
 	//destroiTabSim(t);
+	*/
 	return 0;
 }
