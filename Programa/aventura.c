@@ -10,7 +10,7 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 #include <string.h>
 #include "elemento.h"
 #include "lista.h" 
-#include "tabSim.h"
+//#include "tabSim.h"
 #include "libgame.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
