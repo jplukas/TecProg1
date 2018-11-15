@@ -1,129 +1,80 @@
 #ifndef ELEMENTO_H
 #define ELEMENTO_H
 
-#define TAM_NOME 20
-#define TAM_CURTA 80
-#define TAM_LONGA 200
-#define TAM_ARTIGO 5
-#define NUM_ARTIGOS 4
+/* Comeca defs e includes */
+	#define TAM_NOME 20
+	#define TAM_CURTA 80
+	#define TAM_LONGA 200
+	#define TAM_ARTIGO 5
+	#define NUM_ARTIGOS 4
 
-#ifndef NULL
-#define NULL 0
-#endif /* NULL */
+	#ifndef FALSE
+	#define FALSE 0
+	#endif /* FALSE */
 
-#ifndef FALSE
-#define FALSE 0
-#endif /* FALSE */
-
-#ifndef TRUE
-#define TRUE 1
-#endif /* TRUE */
+	#ifndef TRUE
+	#define TRUE 1
+	#endif /* TRUE */
 
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "lista.h"
-#include "tabSim.h"
+	#include <string.h>
+	#include <stdlib.h>
+	#include <stdio.h>
+	#include "lista.h"
+	//#include "tabSimElem.h"
+/* Termina defs e includes */
 
-typedef enum Tipo_elem{GEN, OBJ, LUGAR, AVENTUREIRO};
 
-int comp(char* chave, Elemento el){
-	return strcmp(chave, el->nome);
-}
+/* Comeca typedefs */
+	typedef enum {GEN, OBJ, LUGAR, AVENTUREIRO}Tipo_elem;
 
-void mostra(Elemento el){
-	printf("%s\n", el->nome);
-}
+	typedef struct elemento * Elemento;
+/* Termina typedefs */
 
-typedef union{
-	int i;
-	double d;
-	char c;
-	char str[TAM_CURTA];
-	void * gen;
-}Val;
 
-typedef	struct{
-	char nome_attr[TAM_NOME];
-	Val val;
-}attr;
+/* Comeca prototipos */
+	int destroiElemento(void* e);
 
-typedef attr * Attr;
+	void mostraElemento(void* e);
 
-typedef struct elem{
-	/* Nome do elemento */
-	char nome[TAM_NOME];
+	Elemento criaElemento(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
 
-	/* Descricao curta */
-	char curta[TAM_CURTA];
+	Elemento criaObj(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
 
-	/* Descricao longa */
-	char longa[TAM_LONGA];
+	Elemento criaLugar(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
 
-	/* Flags */
-	short int ativo;
-	short int visivel;
-	short int conhecido;
+	Elemento criaAventureiro(char* nome, char* curta, char* longa);
 
-	/* Conteudo do elemento [lista] */
-	Lista conteudo;
+	char* getNome(Elemento this);
 
-	/* Acoes ou verbos para o elemento [tabela de hash] */
-	TabSim acoes;
+	char* getCurta(Elemento this);
 
-	/* A DEFINIR */
-	void * animacao;
+	char* getLonga(Elemento this);
 
-	/* Artigos para o elemento (a, o, um, da, do, dum...) */
-	char artigo[NUM_ARTIGOS][TAM_ARTIGO];
+	unsigned short int getAtivo(Elemento this);
 
-	/* Tipo do elemento (Objeto, lugar, aventureiro, saida...) */
-	Tipo_elem tipo;
+	void setAtivo(Elemento this, unsigned short int ativo);
 
-	/* Atributos de objeto ou lugar ("subclasses" de elemento) */
-	union{
-		/* Atributo de lugar */
-		Lista saida;
+	unsigned short int getVisivel(Elemento this);
 
-		/* Atributo de objeto */
-		Lista atributos;
-	}detalhe;
+	void setVisivel(Elemento this, unsigned short int visivel);
 
-	/* Propriedades especificas de lugar */
-	/* (NAO USAR SE NAO FOR LUGAR) */
-	elem * destino;
-	short int aberta;
+	unsigned short int getConhecido(Elemento this);
 
-}elemento;
+	void setConhecido(Elemento this, unsigned short int conhecido);
 
-typedef elemento * Elemento;
+	Elemento buscaDeConteudo(Elemento this, char* chave);
 
-//Funcao que cria e retorna um ponteiro para um elemento.
-//Recebe como parametro uma "string" que sera o nome do elemento.
+	Elemento retiraDeConteudo(Elemento this, char* chave);
 
-Elemento criaElemento(char nome[], char curta[], char longa[],\
-	short int ativo, short int visivel, short int conhecido, char artigo[][]){
-	Elemento el = malloc(sizeof(Elemento));
-	strcpy(el->nome, nome);
-	strcpy(el->curta, curta);
-	strcpy(el->longa, longa);
-	el->ativo = ativo;
-	el->visivel = visivel;
-	el->conhecido = conhecido;
-	el->artigo = artigo;
-	el->tipo = GEN;
-	el->conteudo = criaLista(comp, mostra);
-	el->acoes = criaTabSim(NULL, NULL);
-	return el;
-}
+	unsigned short int colocaEmElemento(Elemento obj, Elemento destino, char* chave);
 
-Elemento criaObj(char nome[], char curta[], char longa[],\
-	short int ativo, short int visivel, short int conhecido, char artigo[][]){
+	unsigned short int carregaVerbo(Elemento this, int (*verbo)(void*, void*), char* chave);
 
-	Elemento el = criaElemento(nome, curta, longa, ativo, visivel, conhecido, artigo);
-	el->tipo = OBJ;
-	el->detalhe.atributos = criaLista(comp, mostra);
-}
+	unsigned short int executaVerbo(Elemento this, char* chave);
+/* Termina prototipos */
 
 #endif /* ELEMENTO_H */
