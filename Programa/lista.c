@@ -12,7 +12,6 @@ typedef struct lista{
 	void (*mostra)(void*);
 }lista;
 
-//typedef lista* Lista;
 
 Lista criaLista(int (*destroi)(void*), void (*mostra)(void*)){
 	Lista l = malloc(sizeof(lista));

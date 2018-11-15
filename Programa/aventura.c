@@ -11,7 +11,7 @@ CODIGO PARA TESTES DAS FUNCOES E ESTRUTURAS DE DADOS DA BIBLIOTECA
 #include "elemento.h"
 #include "lista.h" 
 //#include "tabSim.h"
-#include "libgame.h"
+//#include "libgame.h"
 void entrada(char* a, int t){
 	fgets(a, t, stdin);
 	fflush(stdin);
@@ -19,51 +19,40 @@ void entrada(char* a, int t){
         a[strlen (a) - 1] = '\0';
 }
 
+typedef struct jogo{
+	Elemento lugar;
+	Elemento Aventureiro;
+}jogo;
+
 int main(){
-	Aventureiro = criaAventureiro("Finn", "Finn, o Humano",\
+
+	Elemento Lugar_inicial = criaLugar("Entrada da caverna", "Primeiro local do jogo", \
+	"Você se encontra em uma caverna escura e fria, e se pergunta se está sozinho.\n\
+Não é possível ver ninguém e sons de água corrente se ouvem mais para dentro da caverna.", TRUE, TRUE, TRUE);
+
+	Elemento Aventureiro = criaAventureiro("Finn", "Finn, o Humano",\
 	 "Finn é o último humano da terra de OOO. Junto com seu cão mágico Jake, eles\
  partirão em busca de incríveis aventuras!");
+
+	colocaEmElemento(Aventureiro, Lugar_inicial, "Aventureiro");
+
+	jogo Jogo = {Lugar_inicial, Aventureiro};
 
 	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
 		"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
 (que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
 
-	insereNaLista(Aventureiro->conteudo, escalibur, "Espada");
+	colocaEmElemento(escalibur, Aventureiro, "Espada");
 
-	percorreLista(Aventureiro->conteudo);
+	unsigned short int a = TRUE;
 
-	Elemento e = buscaNaLista(Aventureiro->conteudo, "Espada");
-
-
-	printf("obj: %p\nrec: %p\n", (void*)escalibur, (void*)e);
-	//printf("%s\n", e->curta);
-	//printf("%s\n", e->longa);
-	//printf("%p\n", (void*)e);
-	//printf("%p\n", (void*)escalibur);
-	//examina(e, NULL);
-
-	/*
-	char a[TAM_NOME];
-	Lista l = criaLista(&comp, &mostra);
-	entrada(a, TAM_NOME);
-	Elemento e;
-	while(strcmp(a, "0")){
-		Elemento e = criaElemento(a);
-		insereNaLista(l, e);
-		entrada(a, TAM_NOME);
+	while(a){
+		printf("%s\n", getLonga(Jogo.lugar));
+		a = FALSE;
 	}
 
-	percorreLista(l);	
+	//mostraElemento((void*)Aventureiro);
+	//mostraElemento((void*)escalibur);
 
-	entrada(a, TAM_NOME);
-	while(strcmp(a, "0")){
-		e = criaElemento(a);
-		retiraDaLista(l, a);
-		percorreLista(l);			
-		entrada(a, TAM_NOME);
-	}
-
-	//destroiTabSim(t);
-	*/
 	return 0;
 }
