@@ -20,7 +20,7 @@
 		Lista conteudo;
 
 		/* Acoes ou verbos para o elemento [tabela de hash] */
-		//TabSim acoes;
+		TabSim acoes;
 
 		/* A DEFINIR */
 		void * animacao;
@@ -97,7 +97,7 @@
 		//el->artigo = {"o", "o", "o", "o"};
 		el->tipo = GEN;
 		el->conteudo = criaLista(destroiElemento, mostraElemento);
-		//el->acoes = criaTabSim();
+		el->acoes = criaTabSim(TAM_TABSIM, destroiElemento, mostraElemento);
 		el->destino = NULL;
 		return (Elemento)el;
 	}

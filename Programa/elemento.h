@@ -7,6 +7,7 @@
 	#define TAM_LONGA 200
 	#define TAM_ARTIGO 5
 	#define NUM_ARTIGOS 4
+	#define TAM_TABSIM 31
 
 	#ifndef FALSE
 	#define FALSE 0
@@ -21,7 +22,7 @@
 	#include <stdlib.h>
 	#include <stdio.h>
 	#include "lista.h"
-	//#include "tabSimElem.h"
+	#include "tabSim.h"
 /* Termina defs e includes */
 
 
