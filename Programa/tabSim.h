@@ -6,19 +6,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "lista.h"
+#include "lista_fptr.h"
 
 typedef struct tabSim * TabSim;
 
-TabSim criaTabSim(int m, int (*destroi)(void*), void (*mostra)(void*));
+TabSim criaTabSim(int m);
 
-int destroiTabSim(TabSim t);
+unsigned short int destroiTabSim(TabSim t);
 
-int insereNaTabela(TabSim t, char* chave, void* valor);
+unsigned short int insereNaTabela(TabSim t, char* chave, unsigned short int (*acao)(void*, void*));
 
-void* buscaNaTabela(TabSim t, char* chave);
+unsigned short int(*buscaNaTabela(TabSim t, char* chave))(void*, void*);
 
-void* retiraDaTabela(TabSim t, char* chave);
+unsigned short int(*retiraDaTabela(TabSim t, char* chave))(void*, void*);
 
 void percorreTabela(TabSim t);
 #endif /* TABSIM_H */

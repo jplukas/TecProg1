@@ -2,7 +2,7 @@
 
 typedef struct tabSim{
 	int m;
-	Lista* tab;
+	ListaFptr* tab;
 }tabSim;
 
 int funcHash(int m, char* chave){
@@ -13,19 +13,19 @@ int funcHash(int m, char* chave){
 	return k;
 }
 
-TabSim criaTabSim(int m, int (*destroi)(void*), void (*mostra)(void*)){
+TabSim criaTabSim(int m){
 	tabSim* t = malloc(sizeof(tabSim));
 	t->m = m;
-	t->tab = malloc(m * sizeof(Lista));
-	for(int i = 0; i < m; i++) t->tab[i] = criaLista(destroi, mostra);
+	t->tab = malloc(m * sizeof(ListaFptr));
+	for(int i = 0; i < m; i++) t->tab[i] = criaListaFptr();
 	return ((TabSim)t);
 }
 
-int destroiTabSim(TabSim t){
+unsigned short int destroiTabSim(TabSim t){
 	if(!t) return 0;
 	tabSim* tab = (tabSim*)t;
 	for(int i = 0; i < tab->m; i++){
-		destroiLista(tab->tab[i]);
+		destroiListaFptr(tab->tab[i]);
 		tab->tab[i] = NULL;
 	}
 	free(tab->tab);
@@ -34,26 +34,26 @@ int destroiTabSim(TabSim t){
 	return 1;
 }
 
-int insereNaTabela(TabSim t, char* chave, void* valor){
+unsigned short int insereNaTabela(TabSim t, char* chave, unsigned short int (*acao)(void*, void*)){
 	tabSim* tab = (tabSim*)t;
 	int nHash = funcHash(tab->m, chave);
-	return insere(tab->tab[nHash], chave, valor);
+	return insereListaFptr(tab->tab[nHash], chave, acao);
 }
 
-void* buscaNaTabela(TabSim t, char* chave){
+unsigned short int(*buscaNaTabela(TabSim t, char* chave))(void*, void*){
 	tabSim* tab = (tabSim*)t;
 	int nHash = funcHash(tab->m, chave);
-	return busca(tab->tab[nHash], chave);
+	return buscaListaFptr(tab->tab[nHash], chave);
 }
 
-void* retiraDaTabela(TabSim t, char* chave){
+unsigned short int(*retiraDaTabela(TabSim t, char* chave))(void*, void*){
 	tabSim* tab = (tabSim*)t;
 	int nHash = funcHash(tab->m, chave);
-	return retira(tab->tab[nHash], chave);
+	return retiraListaFptr(tab->tab[nHash], chave);
 }
 
 void percorreTabela(TabSim t){
 	tabSim* tab = (tabSim*)t;
 	for(int i = 0; i < tab->m;i++)
-		percorre(tab->tab[i]);
+		percorreListaFptr(tab->tab[i]);
 }

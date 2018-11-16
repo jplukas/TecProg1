@@ -24,6 +24,17 @@ typedef struct jogo{
 	Elemento Aventureiro;
 }jogo;
 
+jogo Jogo;
+
+unsigned short int chorar(void* a, void* b){
+	printf("BUAAAA, BUAAAAAA\nESTOU CHORANDO!\n");
+	return TRUE;
+}
+
+unsigned short int pegar(void* obj, void* IGNORAR){
+	Elemento lugar = Jogo.lugar;
+}
+
 int main(){
 
 	Elemento Lugar_inicial = criaLugar("Entrada da caverna", "Primeiro local do jogo", \
@@ -36,13 +47,18 @@ Não é possível ver ninguém e sons de água corrente se ouvem mais para dentr
 
 	colocaEmElemento(Aventureiro, Lugar_inicial, "Aventureiro");
 
-	jogo Jogo = {Lugar_inicial, Aventureiro};
+	Jogo = {Lugar_inicial, Aventureiro};
 
 	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
 		"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
 (que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
 
 	colocaEmElemento(escalibur, Aventureiro, "Espada");
+
+	unsigned short int res = carregaVerbo(Aventureiro, chorar, "CHORE");
+
+	unsigned short int (*func)(void*, void*) = buscaVerbo(Aventureiro, "CHORE");
+
 
 	unsigned short int a = TRUE;
 
@@ -51,6 +67,7 @@ Não é possível ver ninguém e sons de água corrente se ouvem mais para dentr
 		a = FALSE;
 	}
 
+	res = func(NULL, NULL);
 	//mostraElemento((void*)Aventureiro);
 	//mostraElemento((void*)escalibur);
 

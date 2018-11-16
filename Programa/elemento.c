@@ -48,26 +48,28 @@
 /* Termina typedefs */
 
 /* Comeca funcoes */
-	int destroiElemento(void* e){
-		if(!e) return -1;
-		destroiLista(((elemento*)e)->conteudo);
-		if(((elemento*)e)->tipo == LUGAR) destroiLista(((elemento*)e)->detalhe.saidas);
-		else if(((elemento*)e)->tipo != GEN) destroiLista(((elemento*)e)->detalhe.atributos);
-		if(((elemento*)e)->animacao){
-			free(((elemento*)e)->animacao);
-			((elemento*)e)->animacao = NULL;
+	int destroiElemento(void* this){
+		if(!this) return -1;
+		elemento* e = (elemento*) this;
+		destroiLista(e->conteudo);
+		if(e->tipo == LUGAR) destroiLista(e->detalhe.saidas);
+		else if(e->tipo != GEN) destroiLista(e->detalhe.atributos);
+		if(e->animacao){
+			free(e->animacao);
+			e->animacao = NULL;
 		}
 		destroiElemento(((elemento*)e)->destino);
-		free(e);
-		e = 0;
+		free(this);
+		this = 0;
 		return TRUE;
 	}
 
-	void mostraElemento(void* e){
-		if(!e) return;
-		printf("Nome: %s\nDescrição curta: %s\n", ((elemento*)e)->nome, ((elemento*)e)->curta);
-		printf("Conteudo de %s:\n", ((elemento*)e)->nome);
-		percorre(((elemento*)e)->conteudo);
+	void mostraElemento(void* this){
+		if(!this) return;
+		elemento* e = (elemento*) this;
+		printf("Nome: %s\nDescrição curta: %s\n", e->nome, e->curta);
+		printf("Conteudo de %s:\n", e->nome);
+		percorre(e->conteudo);
 		printf("\n");
 	}
 
@@ -97,7 +99,7 @@
 		//el->artigo = {"o", "o", "o", "o"};
 		el->tipo = GEN;
 		el->conteudo = criaLista(destroiElemento, mostraElemento);
-		el->acoes = criaTabSim(TAM_TABSIM, destroiElemento, mostraElemento);
+		el->acoes = criaTabSim(TAM_TABSIM);
 		el->destino = NULL;
 		return (Elemento)el;
 	}
@@ -105,26 +107,26 @@
 	Elemento criaObj(char* nome, char* curta, char* longa,\
 	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido){
 
-		Elemento el = criaElemento(nome, curta, longa, ativo, visivel, conhecido);
-		((elemento*)el)->tipo = OBJ;
-		((elemento*)el)->detalhe.atributos = criaLista(destroiElemento, mostraElemento);
-		return el;
+		elemento* el = (elemento*)criaElemento(nome, curta, longa, ativo, visivel, conhecido);
+		el->tipo = OBJ;
+		el->detalhe.atributos = criaLista(destroiElemento, mostraElemento);
+		return (Elemento)el;
 	}
 
 	Elemento criaLugar(char* nome, char* curta, char* longa,\
 	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido){
 
-		Elemento el = criaElemento(nome, curta, longa, ativo, visivel, conhecido);
-		((elemento*)el)->tipo = LUGAR;
-		((elemento*)el)->detalhe.saidas = criaLista(destroiElemento, mostraElemento);
-		return el;
+		elemento* el = (elemento*)criaElemento(nome, curta, longa, ativo, visivel, conhecido);
+		el->tipo = LUGAR;
+		el->detalhe.saidas = criaLista(destroiElemento, mostraElemento);
+		return (Elemento)el;
 	}
 
 	Elemento criaAventureiro(char* nome, char* curta, char* longa){
-		Elemento el = criaElemento(nome, curta, longa, TRUE, TRUE, TRUE);
-		((elemento*)el)->tipo = AVENTUREIRO;
-		((elemento*)el)->detalhe.atributos = criaLista(destroiElemento, mostraElemento);
-		return el;
+		elemento* el = (elemento*)criaElemento(nome, curta, longa, TRUE, TRUE, TRUE);
+		el->tipo = AVENTUREIRO;
+		el->detalhe.atributos = criaLista(destroiElemento, mostraElemento);
+		return (Elemento)el;
 	}
 
 	char* getNome(Elemento this){
@@ -194,14 +196,15 @@
 		return TRUE;
 	}
 
-	unsigned short int carregaVerbo(Elemento this, int (*verbo)(void*, void*), char* chave){
+	unsigned short int carregaVerbo(Elemento this, unsigned short int (*verbo)(void*, void*), char* chave){
 		if(!this || !verbo || !chave) return FALSE;
-		return TRUE;
+		elemento* e = (elemento*) this;
+		return insereNaTabela(e->acoes, chave, verbo);
 	}
 
-	unsigned short int executaVerbo(Elemento this, char* chave){
-		if(!this || !chave) return FALSE;
-		return TRUE;
+	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*){
+		if(!this || !chave) return NULL;
+		return buscaNaTabela(((elemento*)this)->acoes, chave);
 	}
 
 /* Termina funcoes */

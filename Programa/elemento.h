@@ -73,9 +73,9 @@
 
 	unsigned short int colocaEmElemento(Elemento obj, Elemento destino, char* chave);
 
-	unsigned short int carregaVerbo(Elemento this, int (*verbo)(void*, void*), char* chave);
+	unsigned short int carregaVerbo(Elemento this, unsigned short int (*verbo)(void*, void*), char* chave);
 
-	unsigned short int executaVerbo(Elemento this, char* chave);
+	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*);
 /* Termina prototipos */
 
 #endif /* ELEMENTO_H */
