@@ -101,6 +101,7 @@
 		el->conteudo = criaLista(destroiElemento, mostraElemento);
 		el->acoes = criaTabSim(TAM_TABSIM);
 		el->destino = NULL;
+		el->animacao = NULL;
 		return (Elemento)el;
 	}
 

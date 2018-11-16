@@ -71,7 +71,7 @@ unsigned short int mostrar_inventorio(void* obj, void* IGNORAR){
 
 int main(){
 
-	Elemento escalibur = criaObj("E", "Espada mágica do tipo Claymore",\
+	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
 		"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
 (que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
 
@@ -116,26 +116,6 @@ Não é possível ver ninguém e sons de água corrente se ouvem mais para dentr
 	func = buscaVerbo(Aventureiro, "PEGUE");
 
 	res = func("Espada", NULL);
-
-	printf("%s\n", getNome(Aventureiro));
-
-	printf("%s\n", getCurta(Aventureiro));
-
-	printf("%s\n", getLonga(Aventureiro));
-
-	printf("%s\n", getNome(Lugar_inicial));
-
-	printf("%s\n", getCurta(Lugar_inicial));
-
-	printf("%s\n", getLonga(Lugar_inicial));
-
-	printf("%s\n", getNome(escalibur));
-
-	printf("%s\n", getCurta(escalibur));
-
-	printf("%s\n", getLonga(escalibur));
-
-	mostraElemento(escalibur);
 	/*
 	func = buscaVerbo(Lugar_inicial, "EXAMINE");
 

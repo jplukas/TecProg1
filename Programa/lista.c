@@ -45,6 +45,7 @@ int insere(Lista l, char* chave, void* valor){
 	if(!e->chave) return 0;
 	e->valor = valor;
 	strcpy(e->chave, chave);
+	e->next = NULL;
 	if(!(l->cabeca)) l->cabeca = e;
 	else{
 		elo* el = l->cabeca;
@@ -77,7 +78,6 @@ void* retira(Lista l, char* chave){
 	if(strcmp(e->chave, chave) == 0){
 		void* aux = e->valor;
 		l->cabeca = e->next;
-		l->destroi(e->valor);
 		e->valor = NULL;
 		free(e->chave);
 		e->chave = NULL;
@@ -89,7 +89,6 @@ void* retira(Lista l, char* chave){
 		if(strcmp(e->chave, chave) == 0){
 			void* aux = e->valor;
 			ant->next = e->next;
-			l->destroi(e->valor);
 			e->valor = NULL;
 			free(e->chave);
 			e->chave = NULL;
