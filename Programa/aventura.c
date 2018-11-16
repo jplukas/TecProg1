@@ -33,9 +33,47 @@ unsigned short int chorar(void* a, void* b){
 
 unsigned short int pegar(void* obj, void* IGNORAR){
 	Elemento lugar = Jogo.lugar;
+	Elemento Aventureiro = Jogo.Aventureiro;
+	char* chave = (char*)obj;
+	Elemento objeto = retiraDeConteudo(lugar, chave);
+	if(!objeto){
+		printf("Não há nenhum(a) %s aqui.\n", chave);
+		return FALSE;
+	}
+	printf("Você pegou %s.\n", getNome(objeto));
+	printf("Descrição longa: %s\n", getLonga(objeto));
+	return colocaEmElemento(objeto, Aventureiro, chave);
+}
+
+unsigned short int mostrar_lugar(void* obj, void* IGNORAR){
+	Elemento lugar = Jogo.lugar;
+	char* chave = (char*)obj;
+	Elemento objeto = buscaDeConteudo(lugar, chave);
+	if(!objeto){
+		printf("Não há nenhum(a) %s aqui.\n", chave);
+		return FALSE;
+	}
+	mostraElemento(objeto);
+	return TRUE;
+}
+
+unsigned short int mostrar_inventorio(void* obj, void* IGNORAR){
+	Elemento lugar = Jogo.Aventureiro;
+	char* chave = (char*)obj;
+	Elemento objeto = buscaDeConteudo(lugar, chave);
+	if(!objeto){
+		printf("Não há nenhum(a) %s no seu inventório.\n", chave);
+		return FALSE;
+	}
+	mostraElemento(objeto);
+	return TRUE;
 }
 
 int main(){
+
+	Elemento escalibur = criaObj("E", "Espada mágica do tipo Claymore",\
+		"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
+(que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
 
 	Elemento Lugar_inicial = criaLugar("Entrada da caverna", "Primeiro local do jogo", \
 	"Você se encontra em uma caverna escura e fria, e se pergunta se está sozinho.\n\
@@ -47,27 +85,65 @@ Não é possível ver ninguém e sons de água corrente se ouvem mais para dentr
 
 	colocaEmElemento(Aventureiro, Lugar_inicial, "Aventureiro");
 
-	Jogo = {Lugar_inicial, Aventureiro};
+	Jogo.lugar = Lugar_inicial;
+	Jogo.Aventureiro = Aventureiro;
 
-	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
-		"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
-(que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
-
-	colocaEmElemento(escalibur, Aventureiro, "Espada");
 
 	unsigned short int res = carregaVerbo(Aventureiro, chorar, "CHORE");
 
-	unsigned short int (*func)(void*, void*) = buscaVerbo(Aventureiro, "CHORE");
+	res = colocaEmElemento(escalibur, Lugar_inicial, "Espada");	
 
+	res = carregaVerbo(Aventureiro, pegar, "PEGUE");
 
-	unsigned short int a = TRUE;
+	res = carregaVerbo(Lugar_inicial, mostrar_lugar, "EXAMINE");
 
-	while(a){
-		printf("%s\n", getLonga(Jogo.lugar));
-		a = FALSE;
-	}
+	res = carregaVerbo(Aventureiro, mostrar_inventorio, "EXAMINE");
 
-	res = func(NULL, NULL);
+	unsigned short int (*func)(void*, void*) = NULL;
+	/*
+	func = buscaVerbo(Lugar_inicial, "EXAMINE");
+
+	res = func("Aventureiro", NULL);
+
+	func = buscaVerbo(Lugar_inicial, "EXAMINE");
+
+	res = func("Espada", NULL);	
+	*/
+	func = buscaVerbo(Aventureiro, "EXAMINE");
+
+	res = func("Espada", NULL);
+
+	func = buscaVerbo(Aventureiro, "PEGUE");
+
+	res = func("Espada", NULL);
+
+	printf("%s\n", getNome(Aventureiro));
+
+	printf("%s\n", getCurta(Aventureiro));
+
+	printf("%s\n", getLonga(Aventureiro));
+
+	printf("%s\n", getNome(Lugar_inicial));
+
+	printf("%s\n", getCurta(Lugar_inicial));
+
+	printf("%s\n", getLonga(Lugar_inicial));
+
+	printf("%s\n", getNome(escalibur));
+
+	printf("%s\n", getCurta(escalibur));
+
+	printf("%s\n", getLonga(escalibur));
+
+	mostraElemento(escalibur);
+	/*
+	func = buscaVerbo(Lugar_inicial, "EXAMINE");
+
+	res = func("Aventureiro", NULL);
+	func = buscaVerbo(Aventureiro, "EXAMINE");
+
+	res = func("Espada", NULL);	
+	*/
 	//mostraElemento((void*)Aventureiro);
 	//mostraElemento((void*)escalibur);
 
