@@ -111,9 +111,25 @@ void percorre(Lista l){
 	elo* e = l->cabeca;
 	while(e){
 		n++;
-		printf("Chave: %s\n", e->chave);
+		printf("%s\n", e->chave);
 		l->mostra(e->valor);
 		e = e->next;
 	}
-	printf("Numero de elementos na lista: %d\n", n);
+}
+
+void* itera_item(Lista l){
+	static elo* e;
+	if(l){
+		e = ((lista*)l)->cabeca;
+		if(!e){
+			printf("(vazio)\n");
+			return NULL;
+		}
+	}
+	else{
+		e = e->next;
+		if(!e) return NULL;  
+	}
+	printf("%s\n", e->chave);
+	return (void*)e->valor;
 }

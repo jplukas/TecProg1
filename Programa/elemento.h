@@ -27,9 +27,9 @@
 
 
 /* Comeca typedefs */
-	typedef enum {GEN, OBJ, LUGAR, AVENTUREIRO}Tipo_elem;
-
 	typedef struct elemento * Elemento;
+
+	typedef enum {GEN, OBJ, LUGAR, SAIDA, AVENTUREIRO, NPC, INIMIGO}Tipo_elem;
 /* Termina typedefs */
 
 
@@ -45,6 +45,12 @@
 	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
 
 	Elemento criaLugar(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
+
+	Elemento criaNPC(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
+
+	Elemento criaInimigo(char* nome, char* curta, char* longa,\
 	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
 
 	Elemento criaAventureiro(char* nome, char* curta, char* longa);
@@ -69,13 +75,21 @@
 
 	Elemento buscaDeConteudo(Elemento this, char* chave);
 
+	void mostraConteudo(Elemento this);
+
 	Elemento retiraDeConteudo(Elemento this, char* chave);
 
 	unsigned short int colocaEmElemento(Elemento obj, Elemento destino, char* chave);
 
 	unsigned short int carregaVerbo(Elemento this, unsigned short int (*verbo)(void*, void*), char* chave);
 
-	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*);
+	unsigned short int executaVerbo(Elemento this, char* chave, void* param1, void* param2);
+
+	Tipo_elem getTipo(Elemento this);
+
+	void setTipo(Elemento this, Tipo_elem tipo);
+
+	Elemento itera_elemento(Elemento this);
 /* Termina prototipos */
 
 #endif /* ELEMENTO_H */

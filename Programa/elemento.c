@@ -43,7 +43,7 @@
 		/* Propriedades especificas de lugar */
 		/* (NAO USAR SE NAO FOR LUGAR) */
 		struct elem * destino;
-		short int aberta;
+		unsigned short int aberta;
 	}elemento;
 /* Termina typedefs */
 
@@ -68,8 +68,6 @@
 		if(!this) return;
 		elemento* e = (elemento*) this;
 		printf("Nome: %s\nDescrição curta: %s\n", e->nome, e->curta);
-		printf("Conteudo de %s:\n", e->nome);
-		percorre(e->conteudo);
 		printf("\n");
 	}
 
@@ -96,11 +94,12 @@
 		el->ativo = ativo;
 		el->visivel = visivel;
 		el->conhecido = conhecido;
-		//el->artigo = {"o", "o", "o", "o"};
+		//el->artigo = NULL;
 		el->tipo = GEN;
 		el->conteudo = criaLista(destroiElemento, mostraElemento);
 		el->acoes = criaTabSim(TAM_TABSIM);
 		el->destino = NULL;
+		el->aberta = 0;
 		el->animacao = NULL;
 		return (Elemento)el;
 	}
@@ -124,9 +123,22 @@
 	}
 
 	Elemento criaAventureiro(char* nome, char* curta, char* longa){
-		elemento* el = (elemento*)criaElemento(nome, curta, longa, TRUE, TRUE, TRUE);
+		elemento* el = (elemento*)criaObj(nome, curta, longa, TRUE, TRUE, TRUE);
 		el->tipo = AVENTUREIRO;
-		el->detalhe.atributos = criaLista(destroiElemento, mostraElemento);
+		return (Elemento)el;
+	}
+
+	Elemento criaNPC(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido){
+		elemento* el = (elemento*)criaObj(nome, curta, longa, ativo, visivel, conhecido);
+		el->tipo = NPC;
+		return (Elemento)el;
+	}
+
+	Elemento criaInimigo(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido){
+		elemento* el = (elemento*)criaObj(nome, curta, longa, ativo, visivel, conhecido);
+		el->tipo = INIMIGO;
 		return (Elemento)el;
 	}
 
@@ -181,9 +193,20 @@
 		((elemento*)this)->conhecido = conhecido;
 	}
 
+	Tipo_elem getTipo(Elemento this){
+		if(!this) return 0;
+		Tipo_elem t = ((elemento*)this)->tipo;
+		return t;
+	}
+
+	void setTipo(Elemento this, Tipo_elem tipo){
+		if(!this) return;
+		((elemento*)this)->tipo = tipo;
+	}
+
 	Elemento buscaDeConteudo(Elemento this, char* chave){
 		if(!this || !chave) return NULL;
-		return ((Elemento)busca(((elemento*)this)->conteudo, chave));
+		return busca(((elemento*)this)->conteudo, chave);
 	}
 
 	Elemento retiraDeConteudo(Elemento this, char* chave){
@@ -203,9 +226,19 @@
 		return insereNaTabela(e->acoes, chave, verbo);
 	}
 
-	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*){
-		if(!this || !chave) return NULL;
-		return buscaNaTabela(((elemento*)this)->acoes, chave);
+	unsigned short int executaVerbo(Elemento this, char* chave, void* param1, void* param2){
+		if(!this || !chave) return 0;
+		unsigned short int (*func)(void*, void*) = buscaNaTabela(((elemento*)this)->acoes, chave);
+		if(!func){
+			return 0;
+		}
+		return func(param1, param2);
+	}
+
+	Elemento itera_elemento(Elemento this){
+		Lista conteudo = NULL;
+		if(this) conteudo = ((elemento*)this)->conteudo;
+		return (Elemento) itera_item(conteudo);
 	}
 
 /* Termina funcoes */

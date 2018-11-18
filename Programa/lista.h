@@ -19,4 +19,5 @@ void* retira(Lista l, char* chave);
 
 void percorre(Lista l);
 
+void* itera_item(Lista l);
 #endif /* LISTA_H */

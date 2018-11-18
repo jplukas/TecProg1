@@ -1,7 +1,7 @@
-CFLAGS= -Wall -Wpedantic -std=c99 -g
+CFLAGS= -Wall -Wpedantic -O2 -std=c99 -g
 CC=gcc
 PROG=aventura
-${PROG}.out: ${PROG}.o lista.o elemento.o tabSim.o lista_fptr.o
+${PROG}.out: ${PROG}.o lista.o elemento.o tabSim.o lista_fptr.o libgame.o
 	${CC} -o ${PROG}.out $^
 
 clean:
@@ -11,4 +11,4 @@ run:
 	./${PROG}.out
 
 debug:
-	valgrind ./${PROG}.out -v --leak-check=full --track-origins=yes 
+	valgrind ./${PROG}.out --leak-check=full --track-origins=yes 

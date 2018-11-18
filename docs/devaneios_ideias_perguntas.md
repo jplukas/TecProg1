@@ -9,6 +9,8 @@ Assim, a solução que vamos adotar será a de se usar uma variável global para
 Se a instância do jogo for simplesmente um programa, podemos colocar essa variável dentro desse programa. Porém, temos que acessar essa variável de dentro de código que não vai estar, *a priori*, junto com o programa principal, a saber, temos que acessá-la de dentro de elemento.h.
 Uma ideia interessante é colocar essa variável no próprio elemento.h, assim eliminamos esse problema, e não o teremos também, quando formos acessar essa variável de dentro do código do programa principal, pois teremos que importar elemento.h dele, ou seja, a variável Aventureiro, de tipo Elemento será uma "variável de classe" de elemento.h (ou de outra biblioteca, se assim for decidido).
 
+Criar novos tipos de elemento: NPC e INIMIGO. Um NPC (non-playable character) será uma personagem do jogo com quem o aventureiro poderá interagir (como um homem velho em uma caverna...), mas não poderá ser controlado. Um INIMIGO é, por definição, um inimigo. Pode ser usado para que haja uma luta, em um determinado ponto da história. 
 
-
+O "atributo" descrição longa de um elemento que seja um LUGAR será usado para fazer uma apresentação do lugar em que o aventureiro se encontra, por exemplo: "Você se vê em um lugar cheio de computadores, e vários estudantes estão usando esses computadores.
+Você está sentado em uma mesa com um computador também, mas não está usando-o. Ao seu lado você vê uma pessoa aparentemente dormindo debruçada em uma das mesas. Há duas saídas de lados opostos da sala."
 
