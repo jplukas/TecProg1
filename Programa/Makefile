@@ -11,4 +11,4 @@ run:
 	./${PROG}.out
 
 debug:
-	valgrind ./${PROG}.out --leak-check=full --track-origins=yes 
+	valgrind -v --show-leak-kinds=all --leak-check=full --track-origins=yes ./${PROG}.out

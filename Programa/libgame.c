@@ -5,7 +5,7 @@
 char entrada_texto[TAM_ENTRADA];
 
 unsigned short int chorar(void* IGNORAR, void* IGNORAR2){
-	printf("BUAAAA, BUAAAAAA\nESTOU CHORANDO!\n");
+	printf("BUAAAA, BUAAAAAA\nESTOU CHORANDO!\n\n");
 	return TRUE;
 }
 
@@ -15,19 +15,18 @@ unsigned short int pegar(void* obj, void* IGNORAR){
 	char* chave = (char*)obj;
 	Elemento objeto = retiraDeConteudo(lugar, chave);
 	if(!objeto){
-		printf("Não há nenhum(a) %s aqui.\n", chave);
+		printf("Não há nenhum(a) %s aqui.\n\n", chave);
 		return TRUE;
 	}
 	if(!getVisivel(objeto) || !getAtivo(objeto) || getTipo(objeto) != OBJ){
 		if(getTipo(objeto) != OBJ) printf("Você não pode pegar %s, silly!\n", chave);
 		else{
 			colocaEmElemento(objeto, lugar, chave);
-			printf("Não há nenhum(a) %s aqui.\n", chave);
+			printf("Não há nenhum(a) %s aqui.\n\n", chave);
 		}
 		return TRUE;
 	}
-	printf("Você pegou %s.\n", getNome(objeto));
-	printf("Descrição: %s\n\n", getLonga(objeto));
+	printf("Você pegou %s.\n\n", getNome(objeto));
 	return colocaEmElemento(objeto, Aventureiro, chave);
 }
 
@@ -37,7 +36,7 @@ unsigned short int mostrar_lugar(void* obj, void* IGNORAR){
 	Elemento objeto = buscaDeConteudo(lugar, chave);
 	if(!objeto || !getVisivel(objeto) || !getAtivo(objeto)){
 		printf("Não há nenhum(a) %s aqui.\n\n", chave);
-		return TRUE;
+		return FALSE;
 	}
 	printf("Há um(a) %s aqui!\n", chave);
 	mostraElemento(objeto);
@@ -72,6 +71,36 @@ unsigned short int listar_lugar(void* lugar, void* IGNORAR){
 	return TRUE;
 }
 
+unsigned short int listar_inventorio(void* lugar, void* IGNORAR){
+	Elemento item = itera_elemento(Jogo.Aventureiro);
+	while(item){
+		printf("Nome: %s\n", getNome(item));
+		printf("Descrição: %s\n\n", getLonga(item));
+		item = itera_elemento(NULL);
+	}
+	printf("\n");
+	return TRUE;
+}
+
+unsigned short int largar(void* obj, void* IGNORAR){
+	if(!obj) return FALSE;
+	char* chave = (char*)obj;
+	Elemento el = retiraDeConteudo(Jogo.Aventureiro, chave);
+	if(!el){
+		printf("Não há nenhum(a) %s no seu inventório.\n\n", chave);
+		return TRUE;
+	}
+	if(colocaEmElemento(el, Jogo.lugar_atual, chave)){
+		printf("Você deixou o item %s %s em ", chave, getNome(el));
+		printf("%s.\n", getNome(Jogo.lugar_atual));
+		return TRUE;
+	}
+	else{
+		colocaEmElemento(el, Jogo.Aventureiro, chave);
+		printf("Você não conseguiu largar %s.\n", chave);
+		return TRUE;
+	}
+}
 
 void inicializa_jogo(){
 	Elemento Lugar_inicial = criaLugar("Entrada da caverna", "Primeiro local do jogo", \
@@ -82,11 +111,11 @@ Não é possível ver ninguém e sons de água corrente se ouvem mais para dentr
 	 "Finn é o último humano da terra de OOO. Junto com seu cão mágico Jake, eles\
 partirão em busca de incríveis aventuras!");
 
-	TabSim acoes = criaTabSim(TAM_TABSIM);
+	//TabSim acoes = criaTabSim(TAM_TABSIM);
 
 	unsigned short int res = 1;
 
-	res = colocaEmElemento(Aventureiro, Lugar_inicial, "Aventureiro");
+	res = colocaEmElemento(Aventureiro, Lugar_inicial, "AVENTUREIRO");
 
 	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
 	"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
@@ -95,6 +124,8 @@ partirão em busca de incríveis aventuras!");
 	Jogo.lugar_atual = Lugar_inicial;
 	Jogo.Aventureiro = Aventureiro;
  
+	printf("Nome do lugar: %s", getNome(Jogo.lugar_atual));
+
 	res = carregaVerbo(Aventureiro, chorar, "CHORE");
 
 	res = carregaVerbo(Aventureiro, pegar, "PEGUE");
@@ -104,6 +135,10 @@ partirão em busca de incríveis aventuras!");
 	res = carregaVerbo(Aventureiro, mostrar_inventorio, "EXAMINE");
 
 	res = carregaVerbo(Lugar_inicial, listar_lugar, "LISTAR");
+
+	res = carregaVerbo(Aventureiro, listar_inventorio, "LISTAR");
+
+	res = carregaVerbo(Aventureiro, largar, "LARGAR");
 
 	res = colocaEmElemento(escalibur, Lugar_inicial, "ESPADA");	
 
