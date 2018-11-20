@@ -34,13 +34,13 @@ unsigned short int pegar(void* obj, void* IGNORAR){
 	return colocaEmElemento(objeto, Aventureiro, chave);
 }
 
-unsigned short int mostrar_lugar(void* obj, void* IGNORAR){
+unsigned short int mostrar_item_lugar(void* obj, void* IGNORAR){
 	Elemento lugar = Jogo.lugar_atual;
 	char* chave = (char*)obj;
 	Elemento objeto = buscaDeConteudo(lugar, chave);
 	if(!objeto || !getVisivel(objeto) || !getAtivo(objeto)){
 		printf("Não há nenhum(a) %s aqui.\n\n", chave);
-		return TRUE;
+		return FALSE;
 	}
 	printf("Há um(a) %s aqui!\n", chave);
 	mostraElemento(objeto);
@@ -49,7 +49,7 @@ unsigned short int mostrar_lugar(void* obj, void* IGNORAR){
 	return TRUE;
 }
 
-unsigned short int mostrar_inventorio(void* obj, void* IGNORAR){
+unsigned short int mostrar_item_inventorio(void* obj, void* IGNORAR){
 	if(!obj) return FALSE;
 	Elemento lugar = Jogo.Aventureiro;
 	char* chave = (char*)obj;
@@ -70,11 +70,40 @@ unsigned short int listar_lugar(void* lugar, void* IGNORAR){
 	Elemento item = itera_elemento(Jogo.lugar_atual);
 	while(item){
 		printf("Nome: %s\n", getNome(item));
-		printf("Descrição: %s\n\n", getLonga(item));
 		item = itera_elemento(NULL);
 	}
 	printf("\n");
 	return TRUE;
+}
+
+unsigned short int listar_inventorio(void* lugar, void* IGNORAR){
+	Elemento item = itera_elemento(Jogo.Aventureiro);
+	while(item){
+		printf("Nome: %s\n", getNome(item));
+		item = itera_elemento(NULL);
+	}
+	printf("\n");
+	return TRUE;
+}
+
+unsigned short int largar(void* obj, void* IGNORAR){
+	if(!obj) return FALSE;
+	char* chave = (char*)obj;
+	Elemento el = retiraDeConteudo(Jogo.Aventureiro, chave);
+	if(!el){
+		printf("Não há nenhum(a) %s no seu inventório.\n\n", chave);
+		return TRUE;
+	}
+	if(colocaEmElemento(el, Jogo.lugar_atual, chave)){
+		printf("Você deixou o item %s %s em ", chave, getNome(el));
+		printf("%s.\n", getNome(Jogo.lugar_atual));
+		return TRUE;
+	}
+	else{
+		colocaEmElemento(el, Jogo.Aventureiro, chave);
+		printf("Você não conseguiu largar %s.\n", chave);
+		return TRUE;
+	}
 }
 
 unsigned short int interagir_anciao(void* IGNORAR, void* IGNORAR2){
@@ -150,17 +179,23 @@ partirão em busca de incríveis aventuras!");
 
 	res = carregaVerbo(Aventureiro, pegar, "PEGUE");
 
-	res = carregaVerbo(Lugar_inicial, mostrar_lugar, "EXAMINE");
+	res = carregaVerbo(Lugar_inicial, mostrar_item_lugar, "EXAMINE");
 
-	res = carregaVerbo(sul_caverna, mostrar_lugar, "EXAMINE");
+	res = carregaVerbo(sul_caverna, mostrar_item_lugar, "EXAMINE");
 
-	res = carregaVerbo(Aventureiro, mostrar_inventorio, "EXAMINE");
+	res = carregaVerbo(Aventureiro, mostrar_item_inventorio, "EXAMINE");
 
-	res = carregaVerbo(Lugar_inicial, listar_lugar, "LISTAR");
+	res = carregaVerbo(Aventureiro, listar_inventorio, "LISTE");
 
-	res = carregaVerbo(sul_caverna, listar_lugar, "LISTAR");
+	res = carregaVerbo(Lugar_inicial, listar_lugar, "LISTE");
 
-	res = carregaVerbo(Lugar_inicial, mover, "MOVER");	
+	res = carregaVerbo(sul_caverna, listar_lugar, "LISTE");
+
+	res = carregaVerbo(Lugar_inicial, mover, "MOVA");	
+
+	res = carregaVerbo(anciao_sul_caverna, interagir_anciao, "INTERAJA");	
+
+	res = carregaVerbo(Aventureiro, largar, "LARGUE");	
 
 	printf("\n");
 }
@@ -195,6 +230,7 @@ unsigned short int itera(){
 		return 0;
 	}
 	res = executaVerbo(obj, verbo, complemento, NULL);
+	if(!res) printf("Comando inválido!\n");
 	printf("\n");
 	return res;
 }
