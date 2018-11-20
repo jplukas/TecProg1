@@ -5,26 +5,27 @@
 char entrada_texto[TAM_ENTRADA];
 
 unsigned short int chorar(void* IGNORAR, void* IGNORAR2){
-	printf("BUAAAA, BUAAAAAA\nESTOU CHORANDO!\n");
+	printf("BUAAAA, BUAAAAAA\nESTOU CHORANDO!\n\n");
 	return TRUE;
 }
 
 
 
 unsigned short int pegar(void* obj, void* IGNORAR){
+	if(!obj) return NULL;
 	Elemento lugar = Jogo.lugar_atual;
 	Elemento Aventureiro = Jogo.Aventureiro;
 	char* chave = (char*)obj;
 	Elemento objeto = retiraDeConteudo(lugar, chave);
 	if(!objeto){
-		printf("Não há nenhum(a) %s aqui.\n", chave);
+		printf("Não há nenhum(a) %s aqui.\n\n", chave);
 		return TRUE;
 	}
 	if(!getVisivel(objeto) || !getAtivo(objeto) || getTipo(objeto) != OBJ){
-		if(getTipo(objeto) != OBJ) printf("Você não pode pegar %s, silly!\n", chave);
+		if(getTipo(objeto) != OBJ) printf("Você não pode pegar %s, silly!\n\n", chave);
 		else{
 			colocaEmElemento(objeto, lugar, chave);
-			printf("Não há nenhum(a) %s aqui.\n", chave);
+			printf("Não há nenhum(a) %s aqui.\n\n", chave);
 		}
 		return TRUE;
 	}
@@ -70,7 +71,17 @@ unsigned short int listar_lugar(void* lugar, void* IGNORAR){
 	Elemento item = itera_elemento(Jogo.lugar_atual);
 	while(item){
 		printf("Nome: %s\n", getNome(item));
-		printf("Descrição: %s\n\n", getLonga(item));
+		item = itera_elemento(NULL);
+	}
+	printf("\n");
+	return TRUE;
+}
+
+unsigned short int listar_inventorio(void* lugar, void* IGNORAR){
+	Elemento item = itera_elemento(Jogo.Aventureiro);
+	printf("Conteudo de AVENTUREIRO\n");
+	while(item){
+		printf("Nome: %s\n", getNome(item));
 		item = itera_elemento(NULL);
 	}
 	printf("\n");
@@ -158,9 +169,13 @@ partirão em busca de incríveis aventuras!");
 
 	res = carregaVerbo(Lugar_inicial, listar_lugar, "LISTAR");
 
+	res = carregaVerbo(Aventureiro, listar_inventorio, "LISTAR");
+
 	res = carregaVerbo(sul_caverna, listar_lugar, "LISTAR");
 
-	res = carregaVerbo(Lugar_inicial, mover, "MOVER");	
+	res = carregaVerbo(Lugar_inicial, mover, "MOVER");
+
+	res = carregaVerbo(anciao_sul_caverna, interagir_anciao, "INTERAGIR");	
 
 	printf("\n");
 }
@@ -191,10 +206,11 @@ unsigned short int itera(){
 	if(res) return 1;
 	Elemento obj = buscaDeConteudo(Jogo.lugar_atual, complemento);
 	if(!obj){
-		printf("Comando inválido!\n");
+		printf("Comando inválido!\n\n");
 		return 0;
 	}
 	res = executaVerbo(obj, verbo, complemento, NULL);
+	if(!res)printf("Comando inválido!\n");
 	printf("\n");
 	return res;
 }
