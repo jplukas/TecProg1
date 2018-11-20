@@ -9,6 +9,8 @@ unsigned short int chorar(void* IGNORAR, void* IGNORAR2){
 	return TRUE;
 }
 
+
+
 unsigned short int pegar(void* obj, void* IGNORAR){
 	Elemento lugar = Jogo.lugar_atual;
 	Elemento Aventureiro = Jogo.Aventureiro;
@@ -28,6 +30,7 @@ unsigned short int pegar(void* obj, void* IGNORAR){
 	}
 	printf("Você pegou %s.\n", getNome(objeto));
 	printf("Descrição: %s\n\n", getLonga(objeto));
+	setConhecido(objeto, TRUE);
 	return colocaEmElemento(objeto, Aventureiro, chave);
 }
 
@@ -42,6 +45,7 @@ unsigned short int mostrar_lugar(void* obj, void* IGNORAR){
 	printf("Há um(a) %s aqui!\n", chave);
 	mostraElemento(objeto);
 	printf("\n");
+	setConhecido(objeto, TRUE);
 	return TRUE;
 }
 
@@ -57,6 +61,7 @@ unsigned short int mostrar_inventorio(void* obj, void* IGNORAR){
 	printf("Há um(a) %s no seu inventório!\n", chave);
 	mostraElemento(objeto);
 	printf("\n");
+	setConhecido(objeto, TRUE);
 	return TRUE;
 }
 
@@ -72,25 +77,71 @@ unsigned short int listar_lugar(void* lugar, void* IGNORAR){
 	return TRUE;
 }
 
+unsigned short int interagir_anciao(void* IGNORAR, void* IGNORAR2){
+	static unsigned short int dialogo_aconteceu = FALSE;
+	Elemento anciao = buscaDeConteudo(Jogo.lugar_atual, "ANCIAO");
+	if(!anciao) return FALSE;
+	if(!dialogo_aconteceu){
+		dialogo_aconteceu = TRUE;
+		printf("Olá, AVENTUREIRO. Eu estive te esperando há um bom tempo.\n\
+Você tem uma grande aventura a frente, e grandes perigos para enfrentar. É perigoso ir sozinho, pegue isto!\n");
+		Elemento espada = retiraDeConteudo(anciao, "ESPADA");
+		if(colocaEmElemento(espada, Jogo.Aventureiro, "ESPADA")) printf("Você recebeu ESPADA %s\n", getNome(espada));
+	}
+	else{
+		printf("Vamos, AVENTUREIRO! Uma aventura espera por você!\n");
+	}
+	return TRUE;
+}
+
+unsigned short int mover(void* direcao, void* IGNORAR2){
+	if(!direcao) return FALSE;
+	char* chave = (char*)direcao;
+	Elemento saida = buscaDeSaidas(Jogo.lugar_atual, chave);
+	if(!saida) return FALSE;
+	Elemento destino = getDestino(saida);
+	if(!destino) return FALSE;
+	Jogo.lugar_atual = destino;
+	return TRUE;
+}
 
 void inicializa_jogo(){
-	Elemento Lugar_inicial = criaLugar("Entrada da caverna", "Primeiro local do jogo", \
+	Elemento Lugar_inicial = criaLugar("ENTRADA DA CAVERNA", "Primeiro local do jogo", \
 	"Você se encontra em uma caverna escura e fria, e se pergunta se está sozinho.\n\
 Não é possível ver ninguém e sons de água corrente se ouvem mais para dentro da caverna.", TRUE, TRUE, FALSE);
 
-	Elemento Aventureiro = criaAventureiro("Finn", "Finn, o Humano",\
+	Elemento Aventureiro = criaAventureiro("FINN", "Finn, o Humano",\
 	 "Finn é o último humano da terra de OOO. Junto com seu cão mágico Jake, eles\
 partirão em busca de incríveis aventuras!");
 
-	TabSim acoes = criaTabSim(TAM_TABSIM);
+
+	Elemento sul_caverna = criaLugar("SUL DA CAVERNA", "Interior da caverna ao sul da entrada.", \
+	"Você avança para dentro da caverna e encontra uma espécie de altar iluminado por tochas. No meio do altar há um ancião. Ele parece ciente da sua presença no lugar, e parece estar te esperando. Você pode tentar INTERAGIR.", \
+	TRUE, TRUE, FALSE);
+
+	Elemento anciao_sul_caverna = criaNPC("ANCIAO", "...", "Um ancião está em um altar, de olhos abertos e bem fixos em você, porém ele não aparenta ser uma ameaça. Parece que ele já esperava por você. Você pode tentar INTERAGIR.", \
+	TRUE, TRUE, FALSE);
+
+	Elemento saida_sul_entrada_caverna = criaSaida("SAIDA_SUL", "SAIDA_SUL", "SAIDA_SUL", TRUE, TRUE, FALSE, sul_caverna);
+
+	Elemento escalibur = criaObj("ESCALIBUR", "Espada mágica do tipo Claymore",\
+	"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
+(que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
 
 	unsigned short int res = 1;
 
-	res = colocaEmElemento(Aventureiro, Lugar_inicial, "Aventureiro");
+	res = addSaida(Lugar_inicial, saida_sul_entrada_caverna, "SUL");
 
-	Elemento escalibur = criaObj("Escalibur", "Espada mágica do tipo Claymore",\
-	"A lendária Escalibur, a Claymore mágica que o Magnífico Rei Arthur \
-(que viva para sempre!) tirou da Rocha para se tornar rei da Inglaterra.", TRUE, TRUE, TRUE);
+	res = colocaEmElemento(Aventureiro, Lugar_inicial, "AVENTUREIRO");
+
+	res = colocaEmElemento(anciao_sul_caverna, sul_caverna, "ANCIAO");
+
+	res = colocaEmElemento(escalibur, anciao_sul_caverna, "ESPADA");	
+
+
+	//TabSim acoes = criaTabSim(TAM_TABSIM);
+
+
 
 	Jogo.lugar_atual = Lugar_inicial;
 	Jogo.Aventureiro = Aventureiro;
@@ -101,11 +152,15 @@ partirão em busca de incríveis aventuras!");
 
 	res = carregaVerbo(Lugar_inicial, mostrar_lugar, "EXAMINE");
 
+	res = carregaVerbo(sul_caverna, mostrar_lugar, "EXAMINE");
+
 	res = carregaVerbo(Aventureiro, mostrar_inventorio, "EXAMINE");
 
 	res = carregaVerbo(Lugar_inicial, listar_lugar, "LISTAR");
 
-	res = colocaEmElemento(escalibur, Lugar_inicial, "ESPADA");	
+	res = carregaVerbo(sul_caverna, listar_lugar, "LISTAR");
+
+	res = carregaVerbo(Lugar_inicial, mover, "MOVER");	
 
 	printf("\n");
 }
@@ -122,7 +177,7 @@ unsigned short int itera(){
 	char* complemento = NULL;
 	if(!getConhecido(Jogo.lugar_atual)){
 		printf("%s\n", getLonga(Jogo.lugar_atual));
-		setConhecido(Jogo.lugar_atual, 1);
+		setConhecido(Jogo.lugar_atual, TRUE);
 		printf("\n");
 		listar_lugar(NULL, NULL);
 	}

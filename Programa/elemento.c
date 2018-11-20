@@ -142,6 +142,15 @@
 		return (Elemento)el;
 	}
 
+	Elemento criaSaida(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido, \
+	Elemento saida){
+		Elemento el = criaObj(nome, curta, longa, ativo, visivel, conhecido);
+		setTipo(el, SAIDA);
+		setDestino(el, saida);
+		return el;
+	}
+
 	char* getNome(Elemento this){
 		if(!this) return NULL;
 		static char nome[TAM_NOME];
@@ -241,4 +250,30 @@
 		return (Elemento) itera_item(conteudo);
 	}
 
+	Elemento getDestino(Elemento this){
+		if(!this || getTipo(this) != SAIDA) return NULL;
+		elemento* el = (elemento*)this;
+		return ((Elemento)(el->destino));
+	}
+
+	void setDestino(Elemento this, Elemento destino){
+		if(!this || !destino) return;
+		elemento* el = (elemento*) this;
+		elemento* dest = (elemento*) destino;
+		el->destino = dest;
+	}
+
+	unsigned short int addSaida(Elemento this, Elemento saida, char* chave){
+		if(!this || !saida || !chave) return FALSE;
+		if(getTipo(this) != LUGAR || getTipo(saida) != SAIDA) return FALSE;
+		elemento* el = (elemento*) this;
+		return insere(el->detalhe.saidas, chave, (void*)saida);
+	}
+
+	Elemento buscaDeSaidas(Elemento this, char* direcao){
+		if(!this || !direcao) return NULL;
+		if(getTipo(this) != LUGAR) return NULL;
+		elemento* el = (elemento*) this;
+		return busca(el->detalhe.saidas, direcao);
+	}
 /* Termina funcoes */

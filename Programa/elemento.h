@@ -4,7 +4,7 @@
 /* Comeca defs e includes */
 	#define TAM_NOME 20
 	#define TAM_CURTA 80
-	#define TAM_LONGA 200
+	#define TAM_LONGA 300
 	#define TAM_ARTIGO 5
 	#define NUM_ARTIGOS 4
 	#define TAM_TABSIM 31
@@ -53,6 +53,10 @@
 	Elemento criaInimigo(char* nome, char* curta, char* longa,\
 	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido);
 
+	Elemento criaSaida(char* nome, char* curta, char* longa,\
+	unsigned short int ativo, unsigned short int visivel, \
+	unsigned short int conhecido, Elemento saida);
+
 	Elemento criaAventureiro(char* nome, char* curta, char* longa);
 
 	char* getNome(Elemento this);
@@ -90,6 +94,14 @@
 	void setTipo(Elemento this, Tipo_elem tipo);
 
 	Elemento itera_elemento(Elemento this);
+
+	Elemento getDestino(Elemento this);
+
+	void setDestino(Elemento this, Elemento destino);
+
+	unsigned short int addSaida(Elemento this, Elemento saida, char* chave);
+
+	Elemento buscaDeSaidas(Elemento this, char* direcao);
 /* Termina prototipos */
 
 #endif /* ELEMENTO_H */
