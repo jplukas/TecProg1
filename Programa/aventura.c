@@ -20,9 +20,9 @@ int main(){
 	Elemento Aventureiro = Jogo.Aventureiro;
 	Elemento lugar_atual = Jogo.lugar_atual;
 
-	unsigned short int res = 1; 
-	for (int i = 0; i < 10; ++i){
-		itera();
+	unsigned short int res = 0; 
+	while(!res){
+		res = itera();
 	}
 	return 0;
 }

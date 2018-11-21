@@ -4,7 +4,7 @@
 /* Comeca defs e includes */
 	#define TAM_NOME 20
 	#define TAM_CURTA 80
-	#define TAM_LONGA 300
+	#define TAM_LONGA 500
 	#define TAM_ARTIGO 5
 	#define NUM_ARTIGOS 4
 	#define TAM_TABSIM 31

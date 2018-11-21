@@ -74,6 +74,7 @@ void* retira(Lista l, char* chave){
 		return NULL;	
 	} 
 	elo* e = l->cabeca;
+	if(!e) return NULL;
 	elo* ant = e;
 	if(strcmp(e->chave, chave) == 0){
 		void* aux = e->valor;
@@ -130,6 +131,5 @@ void* itera_item(Lista l){
 		e = e->next;
 		if(!e) return NULL;  
 	}
-	printf("%s\n", e->chave);
 	return (void*)e->valor;
 }
