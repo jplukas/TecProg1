@@ -55,7 +55,7 @@
 
 	Elemento criaSaida(char* nome, char* curta, char* longa,\
 	unsigned short int ativo, unsigned short int visivel, \
-	unsigned short int conhecido, Elemento saida);
+	unsigned short int conhecido, unsigned short int aberta, Elemento saida);
 
 	Elemento criaAventureiro(char* nome, char* curta, char* longa);
 
@@ -98,6 +98,10 @@
 	Elemento getDestino(Elemento this);
 
 	void setDestino(Elemento this, Elemento destino);
+
+	unsigned short int getAberta(Elemento saida);
+
+	void setAberta(Elemento saida, unsigned short int aberta);
 
 	unsigned short int addSaida(Elemento this, Elemento saida, char* chave);
 

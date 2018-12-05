@@ -7,14 +7,6 @@
 	#include "tabSim.h"
 /* Termina Includes e defs */
 
-typedef struct jogo{
-	Elemento Aventureiro;
-	Elemento lugar_atual;
-	TabSim acoes_gerais;
-}jogo;
-
-jogo Jogo;
-
 void inicializa_jogo();
 
 unsigned short int itera();

@@ -144,10 +144,11 @@
 
 	Elemento criaSaida(char* nome, char* curta, char* longa,\
 	unsigned short int ativo, unsigned short int visivel, unsigned short int conhecido, \
-	Elemento saida){
+	unsigned short int aberta, Elemento destino){
 		Elemento el = criaObj(nome, curta, longa, ativo, visivel, conhecido);
 		setTipo(el, SAIDA);
-		setDestino(el, saida);
+		setDestino(el, destino);
+		setAberta(el, aberta);
 		return el;
 	}
 
@@ -261,6 +262,16 @@
 		elemento* el = (elemento*) this;
 		elemento* dest = (elemento*) destino;
 		el->destino = dest;
+	}
+
+	unsigned short int getAberta(Elemento saida){
+		if(!saida || getTipo(saida != SAIDA)) return FALSE;
+		return ((elemento*)saida)->aberta;
+	}
+
+	void setAberta(Elemento saida, unsigned short int aberta){
+		if(!saida || getTipo(saida != SAIDA)) return;
+		((elemento*)saida)->aberta = aberta;
 	}
 
 	unsigned short int addSaida(Elemento this, Elemento saida, char* chave){
