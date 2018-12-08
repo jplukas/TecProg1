@@ -13,4 +13,8 @@ TabSim acoes_gerais;
 
 void inicializa_jogo();
 
+unsigned short int mover(void* direcao, void* IGNORAR2);
+unsigned short int listar(void* lugar, void* IGNORAR);
+unsigned short int itera();
+
 #endif /* LIBGAME_H */

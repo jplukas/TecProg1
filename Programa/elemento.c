@@ -67,7 +67,7 @@
 	void mostraElemento(void* this){
 		if(!this) return;
 		elemento* e = (elemento*) this;
-		printf("Nome: %s\nDescrição curta: %s\n", e->nome, e->curta);
+		printf("Nome: %s\nDescrição: %s\n", e->nome, e->longa);
 		printf("\n");
 	}
 
@@ -246,7 +246,7 @@
 	}
 
 	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*){
-		if(!this || chave) return 0;
+		if(!this || !chave) return 0;
 		return buscaNaTabela(((elemento*)this)->acoes, chave);
 	}
 
@@ -270,12 +270,12 @@
 	}
 
 	unsigned short int getAberta(Elemento saida){
-		if(!saida || getTipo(saida != SAIDA)) return FALSE;
+		if(!saida || getTipo(saida) != SAIDA) return FALSE;
 		return ((elemento*)saida)->aberta;
 	}
 
 	void setAberta(Elemento saida, unsigned short int aberta){
-		if(!saida || getTipo(saida != SAIDA)) return;
+		if(!saida || getTipo(saida) != SAIDA) return;
 		((elemento*)saida)->aberta = aberta;
 	}
 

@@ -1,6 +1,8 @@
 /* Calculadora infixa */
 
 %{
+#include "elemento.h"
+#include <string.h>
 #include <stdio.h>
 #include "tabSim.h"
 #include "coisas.h"
@@ -13,20 +15,19 @@ int yyerror(char *);
 
 /* Declaracoes */
 %union {
-  Elemento elem;
+  	Elemento elem;
 	unsigned short int (*verbo)(void*, void*);
-  char *str;
-  Elemento  direc;
+  	char *str;
 }
 
-%token <elem> OBJ
-
+%token <elem> OBJETO
 /* DESC representa uma palavra desconhecida */
-%token <str> DESC
-%token  NORTE SUL LESTE OESTE CIMA BAIXO EOL FIM INVENT
+%token <str> DESC INDEF
+%token <str> NORTE SUL LESTE OESTE CIMA BAIXO EOL FIM INVENT
 
-%type <direc> dir
-%type <verbo> VERBO
+%type <str> dir
+%token <verbo> VERBO
+%type <elem> obj
 
 %defines
 
@@ -45,14 +46,15 @@ input:	EOL { printf("Zzzz...\n"); }
 				listar(Aventureiro, NULL);
 				} eol
 			| FIM  { return 0;}
-			| INDEF OBJ {
+			| INDEF OBJETO {
+					$1 = strtok($1, " ");
 					unsigned short int (*v)(void*, void*) = buscaVerbo($2, $1);
-					if(!v) puts("COMANDO INVALIDO");
+					if(!v) puts("COMANDO INVALIDO\n");
 					else{
 						v($2, NULL);
 					}
 				} eol
-			| DESC { puts("COMANDO INVALIDO");}
+			| DESC { puts("COMANDO INVALIDO\n");}
 			| error eol;
 ;
 
@@ -60,18 +62,18 @@ cmd: VERBO {
 			 /* Intransitivo */
   	 	     $1(NULL, NULL);
 		   } eol
-   | VERBO OBJ {
+   | VERBO obj {
 			   /* Transitivo direto */
 			   $1($2, NULL);
 			 } eol 
-   | VERBO OBJ OBJ {
+   | VERBO obj obj {
                  /* Bitransitivo */
 			     $1($2, $3);
 			   } eol
    | VERBO DESC {
 			     printf("%s??\n", $2);
 			 } eol 
-   | VERBO OBJ DESC {
+   | VERBO obj DESC {
 			   printf("não sei o que é isso: %s\n",  $3);
 			   } eol 
    | VERBO DESC DESC {
@@ -81,12 +83,12 @@ cmd: VERBO {
 			   } eol 
 ;
 
-dir: NORTE	{$$=$1;}
-	 | SUL		{$$=$1;}
-	 | LESTE	{$$=$1;}
-	 | OESTE	{$$=$1;}
-	 | CIMA		{$$=$1;}
-	 | BAIXO	{$$=$1;}
+obj: OBJETO {$$=$1;}
+
+dir: NORTE	{$$="NORTE";}
+	 | SUL		{$$="SUL";}
+	 | LESTE	{$$="LESTE";}
+	 | OESTE	{$$="OESTE";}
 ;
 
 eol: EOL {return 1;}

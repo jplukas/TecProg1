@@ -5,6 +5,8 @@
 /* Variaveis globais */
 static unsigned short int GAME_OVER = FALSE;
 
+int yyparse();
+
 Elemento Aventureiro = NULL;
 Elemento lugar_atual = NULL;
 TabSim acoes_gerais = NULL;
@@ -19,7 +21,8 @@ unsigned short int chorar(void* IGNORAR, void* IGNORAR2){
 }
 
 unsigned short int pegarObj(void* obj, void* lugar){
-	Elemento objeto = retiraDeConteudo(lugar_atual, getNome(obj));
+	if(!lugar) lugar = lugar_atual;
+	Elemento objeto = retiraDeConteudo(lugar, getNome(obj));
 	if(!getVisivel(objeto)){
 		printf("Não há nenhum(a) %s aqui.\n\n", getNome(obj));
 		return TRUE;
@@ -49,10 +52,12 @@ unsigned short int mostrarItem(void* objeto, void* lugar){
 }
 
 unsigned short int listar(void* lugar, void* IGNORAR){
+	if(!lugar) lugar = lugar_atual;
 	printf("Conteudo de %s:\n\n", getNome(lugar));
 	Elemento item = itera_elemento(lugar);
 	while(item && getAtivo(item) && getVisivel(item)){
-		printf("Nome: %s\n\n", getNome(item));
+		printf("Nome: %s\n", getNome(item));
+		printf("%s\n\n", getCurta(item));
 		item = itera_elemento(NULL);
 	}
 	printf("\n");
@@ -60,13 +65,16 @@ unsigned short int listar(void* lugar, void* IGNORAR){
 }
 
 unsigned short int largar(void* obj, void* lugar){
+	if(!obj) return FALSE;
+	if(!lugar) lugar = lugar_atual;
 	Elemento el = retiraDeConteudo(Aventureiro, getNome(obj));
 	if(!el){
 		printf("Não há nenhum(a) %s no seu inventório.\n\n", getNome(obj));
 		return TRUE;
 	}
 	if(colocaEmElemento(el, lugar, getNome(obj))){
-		printf("Você deixou o item %s em %s\n", getNome(obj), getNome(lugar));
+		printf("Você deixou o item %s em ", getNome(obj));
+		printf("%s\n", getNome(lugar));
 		return TRUE;
 	}
 	else{
@@ -122,6 +130,7 @@ unsigned short int descreverLugar(void* IGNORAR, void* IGNORAR2){
 	printf("%s\n", getNome(lugar_atual));
 	printf("%s\n", getLonga(lugar_atual));
 	printf("\n");
+	setConhecido(lugar_atual, TRUE);
 	return TRUE;
 }
 
@@ -240,4 +249,12 @@ por entre as árvores. O caminho é longo, mas você chega ao seu destino.", TRU
 	carregaVerbo(portal,				entrarNoPortal,		"ENTRE");
 
 	printf("\n");
+}
+
+unsigned short int itera(){
+	if(GAME_OVER) return FALSE;
+	printf("Você está em: %s\n", getNome(lugar_atual));
+	if(!getConhecido(lugar_atual))
+		descreverLugar(lugar_atual, NULL);
+	return (yyparse());
 }

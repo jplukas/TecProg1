@@ -27,9 +27,9 @@
 
 
 /* Comeca typedefs */
-	typedef struct elemento * Elemento;
+typedef enum {GEN, OBJ, LUGAR, SAIDA, AVENTUREIRO, NPC, INIMIGO}Tipo_elem;
 
-	typedef enum {GEN, OBJ, LUGAR, SAIDA, AVENTUREIRO, NPC, INIMIGO}Tipo_elem;
+	typedef struct elemento* Elemento;
 /* Termina typedefs */
 
 

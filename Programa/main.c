@@ -7,11 +7,9 @@
 #include "tabSim.h"
 #include "coisas.h"
 
-int yyparse();
-
 int main(){
 
 	inicializa_jogo();
-	while(yyparse());
+	while(itera());
 	return 0;
 }
