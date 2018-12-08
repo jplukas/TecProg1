@@ -7,13 +7,10 @@
 	#include "tabSim.h"
 /* Termina Includes e defs */
 
+Elemento Aventureiro;
+Elemento lugar_atual;
+TabSim acoes_gerais;
+
 void inicializa_jogo();
-
-unsigned short int itera();
-/* Comeca Verbos genericos de objeto */
-
-		
-
-/* Termina Verbos genericos de objeto */
 
 #endif /* LIBGAME_H */

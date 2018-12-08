@@ -1,9 +1,8 @@
-#include "libgame.h"
+#include "coisas.h"
 #define TAM_ENTRADA 50
 #define TAM_TABSIM 31
 
 /* Variaveis globais */
-char entrada_texto[TAM_ENTRADA];
 static unsigned short int GAME_OVER = FALSE;
 
 Elemento Aventureiro = NULL;
@@ -241,35 +240,4 @@ por entre as árvores. O caminho é longo, mas você chega ao seu destino.", TRU
 	carregaVerbo(portal,				entrarNoPortal,		"ENTRE");
 
 	printf("\n");
-}
-
-void entrada(char* a, int t){
-	fgets(a, t, stdin);
-	fflush(stdin);
-	if ((strlen(a) > 0) && (a[strlen (a) - 1] == '\n'))
-        a[strlen (a) - 1] = '\0';
-}
-
-unsigned short int itera(){
-	char* verbo = NULL;
-	char* complemento = NULL;
-	if(!getConhecido(lugar_atual)){
-		printf("%s\n", getLonga(lugar_atual));
-		setConhecido(lugar_atual, TRUE);
-		printf("\n");
-		listar_lugar(NULL, NULL);
-	}
-	entrada(entrada_texto, TAM_ENTRADA);
-	verbo = strtok(entrada_texto, " ");
-	complemento = strtok(NULL, " ");
-	unsigned short int res = 1;
-	
-	Elemento obj = buscaDeConteudo(lugar_atual, complemento);
-	if(!obj || !getAtivo(obj) || !getVisivel(obj)){
-		return 0;
-	}
-	res = executaVerbo(obj, verbo, complemento, NULL);
-	if(!res) printf("Comando inválido!\n");
-	printf("\n");
-	return GAME_OVER;
 }

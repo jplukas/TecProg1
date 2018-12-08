@@ -89,6 +89,8 @@
 
 	unsigned short int executaVerbo(Elemento this, char* chave, void* param1, void* param2);
 
+	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*);
+
 	Tipo_elem getTipo(Elemento this);
 
 	void setTipo(Elemento this, Tipo_elem tipo);

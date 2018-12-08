@@ -245,6 +245,11 @@
 		return func(param1, param2);
 	}
 
+	unsigned short int (*buscaVerbo(Elemento this, char* chave))(void*, void*){
+		if(!this || chave) return 0;
+		return buscaNaTabela(((elemento*)this)->acoes, chave);
+	}
+
 	Elemento itera_elemento(Elemento this){
 		Lista conteudo = NULL;
 		if(this) conteudo = ((elemento*)this)->conteudo;
