@@ -12,7 +12,7 @@ avent.c : avent.y
 aventl.o: aventl.l avent.c
 
 clean:
-	rm -f avent avent.tab* *.o *~ avent.c avent.tgz aventl.*
+	rm -f avent avent.tab* *.o *~ avent.c avent.tgz aventl.c
 
 dist:
 	tar czf avent.tgz aventl.l avent.y coisas.c coisas.h main.c tabSim.c tabSim.h lista.o lista.h lista_fptr.o lista_fptr.h Makefile
